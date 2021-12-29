@@ -1,7 +1,7 @@
 <p align="center">
   <br>
   <samp>
-    Drakon <b><a rel="nofollow noopener noreferrer" target="_blank" href="https://github.com/ZerrowOnDiscord/Drakon/archive/refs/heads/main.zip">V1.1</a></b>.
+    Drakon <b><a rel="nofollow noopener noreferrer" target="_blank" href="https://github.com/ZerrowOnDiscord/Drakon/archive/refs/heads/main.zip">V1.2</a></b>.
     <br>A good Raid ToolBox.<br>
 
 </samp>
