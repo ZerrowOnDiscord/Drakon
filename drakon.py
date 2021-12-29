@@ -26,6 +26,8 @@ from reaction import ReactionSpammer
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] ReactionSpammer method loaded.")
 from report import Report
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] Report method loaded.")
+from friendrequest import RequestSpammer
+print(f"{Colors.white}[{Colors.purple}+{Colors.white}] RequestSpammer method loaded.")
 time.sleep(1)
 
 ### Ne pas toucher !!!!
@@ -88,6 +90,7 @@ class Start:
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".Webhook_spammer")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".reaction_spammer")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_report")
+        print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_friend")
         print(Colorate.Horizontal(Colors.purple_to_blue, "╚══════════════════════════", 1))
         method = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Entrez une commande → ", 1))
         if method == ".joiner":
@@ -114,6 +117,9 @@ class Start:
         if method == ".mass_report":
             os.system(f'title [Drakon] - Method: MassReport')
             await Methods.report()
+        if method == ".mass_friend":
+            os.system(f'title [Drakon] - Method: MassFriend')
+            await Methods.requestspammer()
             
 class Methods:
     async def joiner():
@@ -256,5 +262,34 @@ class Methods:
                 await pool.put(Report.report(token, chId, gId, msgId))
         time.sleep(4)
         await Start.start()
+    async def requestspammer():
+        tokens = []
+        for token in open("files/tokens.txt"):
+                tokens.append(
+                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+        type = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir le type [a = add & r = remove] → ", 1))
+        if type == '0':
+            await Start.start()
+        if type == 'a' or type == 'add':
+            type = 'add'
+            userTag = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir le nom de l'utilisateur + son tag → ", 1))
+            if userTag == '0':
+                await Start.start()
+            async with TaskPool(5_000) as pool:
+                for token in tokens:
+                    await pool.put(RequestSpammer.friendSpammer(token, userTag, type))
+            time.sleep(4)
+            await Start.start()
+        elif type == 'r' or type == 'remove':
+            type = 'remove'
+            userId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID de l'utilisateur → ", 1))
+            if userId == '0':
+                await Start.start()
+            async with TaskPool(5_000) as pool:
+                for token in tokens:
+                    await pool.put(RequestSpammer.friendSpammer(token, userId, type))
+            time.sleep(4)
+            await Start.start()
+
 
 updater()
