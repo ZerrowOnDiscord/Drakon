@@ -83,12 +83,8 @@ class ReactionSpammer():
                 else:
                     text = await r.text()
                     if "You need to verify your account" in text:
-                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                        if token in tokens:
-                            tokens.remove(token)
+                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified!")
                     elif "Unauthorized" in text:
-                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid and removed from list!")
-                        if token in tokens:
-                            tokens.remove(token)
+                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid!")
                     else:
                         print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} failed to react! {emoji}")

@@ -7,12 +7,10 @@ from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
 
 class BioChanger():
     async def bioChanger(token, bio):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -69,7 +67,6 @@ class BioChanger():
         async with ClientSession(headers=headers) as session:
             async with session.patch(
                     "https://discord.com/api/v9/users/@me", json={"bio": bio}, proxy=randomProxy) as r:
-                
                 if r.status == 200:
                     print(Colors.white + "[" + Colors.green + "+" + Colors.white + f"] {tk} successfully changed bio!")
                 elif r.status == 400:
@@ -77,12 +74,8 @@ class BioChanger():
                 else:
                     text = await r.text()
                     if "You need to verify your account" in text:
-                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                        if token in tokens:
-                            tokens.remove(token)
+                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified!")
                     elif "Unauthorized" in text:
-                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid and removed from list!")
-                        if token in tokens:
-                            tokens.remove(token)
+                        print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid!")
                     else:
                         print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} failed to change bio!")

@@ -7,12 +7,10 @@ from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
 
 class DMSpammer():
     async def dmSpammer(token, userId, msg, amount="1"):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -83,13 +81,9 @@ class DMSpammer():
                             if "content" in text:
                                 print(Colors.white + "[" + Colors.green + "+" + Colors.white + f"] {tk} successfully sent message!")
                             elif "You need to verify your account" in text:
-                                print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                                if token in tokens:
-                                    tokens.remove(token)
+                                print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified")
                             elif "Unauthorized" in text:
-                                print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid and removed from list!")
-                                if token in tokens:
-                                    tokens.remove(token)
+                                print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is invalid!")
                             else:
                                 print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} failed to send message!")
                     else:

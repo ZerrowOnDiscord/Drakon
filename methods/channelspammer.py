@@ -4,15 +4,14 @@ from tasksio import TaskPool
 from aiohttp import client_exceptions
 from sys import exit
 from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
+import string
 
 class ChannelSpammer():
-    async def channelSpammer(token,chId,msg,amount="1",replyMsg=None):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+    async def channelSpammer(token,chId,msg,amount="1",replyMsg=None,numberAft=False):
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -58,6 +57,9 @@ class ChannelSpammer():
         }
 
         tk = token
+        letter = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(5))
+        if numberAft == True:
+            msg = f"||{letter}|| - {msg}"
         try:
             tk = token[:25] + "*" * 34
         except:
@@ -74,11 +76,10 @@ class ChannelSpammer():
             if proxyless == False:
                 randomProxy = proxies[random.randint(0, len(proxies)-1)]
 
+            print(f"https://discord.com/api/v9/channels/{letter}{chId}/messages")
             async with ClientSession(headers=headers) as session:
                 async with session.post(
-                        "https://discord.com/api/v9/channels/%s/messages" %
-                    (chId),
-                        json=j, proxy=randomProxy) as req:
+                        f"https://discord.com/api/v9/channels/{chId}/messages", json=j, proxy=randomProxy) as req:
                     if req.status == 429:
                         print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is rate limited!")
                     elif req.status == 200:
@@ -88,12 +89,8 @@ class ChannelSpammer():
                         if 'message' in json:
                             if 'verify' in json['message']:
                                 print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                                if token in tokens:
-                                    tokens.remove(token)
                             elif 'Unauthorized' in json['message']:
                                 print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token and removed from list!")
-                                if token in tokens:
-                                    tokens.remove(token)
                             elif 'Missing Access' in json['message']:
                                 pass
                             else:

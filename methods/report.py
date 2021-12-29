@@ -7,12 +7,10 @@ from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
 
 class Report():
     async def report(token, channel_id, guild_id, message_id, reason):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -89,12 +87,8 @@ class Report():
                     json = await req.json()
                     if 'message' in json:
                         if 'verify' in json['message']:
-                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                            if token in tokens:
-                                tokens.remove(token)
+                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified!")
                         elif 'Unauthorized' in json['message']:
-                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token and removed from list!")
-                            if token in tokens:
-                                tokens.remove(token)
+                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token!")
                         else:
                             print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} failed to report!")

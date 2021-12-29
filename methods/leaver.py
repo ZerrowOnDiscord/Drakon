@@ -7,12 +7,10 @@ from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
 
 class ServerLeaver():
     async def leaveServer(token, guildId):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -79,13 +77,9 @@ class ServerLeaver():
                     json = await req.json()
                     if 'message' in json:
                         if 'verify' in json['message']:
-                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                            if token in tokens:
-                                tokens.remove(token)
+                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified!")
                         elif 'Unauthorized' in json['message']:
-                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token and removed from list!")
-                            if token in tokens:
-                                tokens.remove(token)
+                            print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token!")
                         elif 'Unknown Guild' in json['message']:
                             pass
                         else:

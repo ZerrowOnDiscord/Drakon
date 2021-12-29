@@ -7,12 +7,10 @@ from pystyle import Add, Center, Anime, Colors, Colorate, Write, System, Box
 
 class ServerJoiner():
     async def joinServer(token, guildInv, bypassRuleScreen = False):
-        tokens = []
-        for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n',
-                                                    '').replace('\r', ''))
+        with open("files/tokens.txt",'r') as handle:
+            tokens = handle.readlines()
+            for x in tokens:
+                tokens = x.rstrip()
         # Proxy Support
         proxies = []
         proxyless = True
@@ -69,22 +67,14 @@ class ServerJoiner():
 
         async with ClientSession(headers=headers) as session:
             try:
-                async with session.post(f"https://discord.com/api/v9/invites/{guildInv}", proxy=randomProxy) as req:
+                async with session.post(f"https://discord.com/api/v9/invites/{guildInv}") as req:
                     if req.status == 429:
                         print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is rate limited!")
                     else:
                         try:
                             json = await req.json()
                             if 'message' in json:
-                                if 'verify' in json['message']:
-                                    print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is unverified and removed from list!")
-                                    if token in tokens:
-                                        tokens.remove(token)
-                                elif 'Unauthorized' in json['message']:
-                                    print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is not a real token and removed from list!")
-                                    if token in tokens:
-                                        tokens.remove(token)
-                                elif 'banned' in json['message']:
+                                if 'banned' in json['message']:
                                     print(Colors.white + "[" + Colors.red + "x" + Colors.white + f"] {tk} is banned from the server!")
                                 elif 'Maximum number of guilds reached' in json[
                                         'message']:
