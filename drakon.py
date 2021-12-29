@@ -29,7 +29,7 @@ print(f"{Colors.white}[{Colors.purple}+{Colors.white}] Report method loaded.")
 time.sleep(1)
 
 ### Ne pas toucher !!!!
-version = 1.0
+version = 1.1
 
 ### Banner
 banner = """
@@ -119,9 +119,7 @@ class Methods:
     async def joiner():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         guildInv = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Entrez l'invitation du serveur → ", 1))
         bypassRulesScreen = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Voulez vous utiliser la bypass method? [Y/N] → ", 1))
         if bypassRulesScreen.lower() == 'y':
@@ -138,9 +136,7 @@ class Methods:
     async def leaver():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         guildId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Entrez l'ID du serveur → ", 1))
         if guildId == '0':
             await Start.start()
@@ -152,9 +148,7 @@ class Methods:
     async def channelspammer():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         chId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du channel → ", 1))
         if chId == '0':
             await Start.start()
@@ -168,18 +162,19 @@ class Methods:
         replyMsg = None
         if replyQues.lower() == 'y':
             replyMsg = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du message a repondre → ", 1))
+        numberQues = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Mettre une suite aleatoire dans le debut du message (conseille)? [Y/N] → ", 1))
+        numberAft = False
+        if numberQues.lower() == 'y':
+            numberAft = True
         async with TaskPool(5_000) as pool:
             for token in tokens:
-                await pool.put(
-                    ChannelSpammer.channelSpammer(token, chId, msg, amount, replyMsg))
+                await pool.put(ChannelSpammer.channelSpammer(token, chId, msg, amount, replyMsg, numberAft))
         time.sleep(4)
         await Start.start()
     async def dmspammer():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         userId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID de l'utilisateur → ", 1))
         if userId == '0':
             await Start.start()
@@ -197,9 +192,7 @@ class Methods:
     async def biochanger():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         bio = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir la nouvelle bio → ", 1))
         if bio == '0':
             await Start.start()
@@ -224,9 +217,7 @@ class Methods:
     async def reactionspammer():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
-                tokens.append(
-                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+            tokens.append(token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         chId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du channel → ", 1))
         if chId == '0':
             await Start.start()
@@ -244,7 +235,6 @@ class Methods:
     async def report():
         tokens = []
         for token in open("files/tokens.txt"):
-            if token != '':
                 tokens.append(
                     token.replace("\n", "").replace('\r\n','').replace('\r', ''))
         print('\n| REPORT REASONS\n| 1: Illegal content\n| 2: Harrassment\n| 3: Spam or Phishing Links\n| 4: Self harm\n| 5: NSFW Content\n')
