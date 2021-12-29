@@ -4,8 +4,6 @@ from pystyle import Center, Colors, Colorate
 import time
 import asyncio
 from tasksio import TaskPool
-import threading
-import discord
 import requests
 sys.path.append('methods')
 os.system(f'title [Drakon] - Loading...')
@@ -28,10 +26,12 @@ from report import Report
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] Report method loaded.")
 from friendrequest import RequestSpammer
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] RequestSpammer method loaded.")
+from checker import checker
+print(f"{Colors.white}[{Colors.purple}+{Colors.white}] MassChecker method loaded.")
 time.sleep(1)
 
-### Ne pas toucher !!!!
-version = 1.1
+### Ne pas toucher !!!! /// Don't touch
+version = 1.2
 
 ### Banner
 banner = """
@@ -91,6 +91,7 @@ class Start:
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".reaction_spammer")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_report")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_friend")
+        print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_checker")
         print(Colorate.Horizontal(Colors.purple_to_blue, "╚══════════════════════════", 1))
         method = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Entrez une commande → ", 1))
         if method == ".joiner":
@@ -120,7 +121,9 @@ class Start:
         if method == ".mass_friend":
             os.system(f'title [Drakon] - Method: MassFriend')
             await Methods.requestspammer()
-            
+        if method == ".mass_checker":
+            os.system(f'title [Drakon] - Method: MassChecker')
+            await Methods.masschecker()
 class Methods:
     async def joiner():
         tokens = []
@@ -290,6 +293,9 @@ class Methods:
                     await pool.put(RequestSpammer.friendSpammer(token, userId, type))
             time.sleep(4)
             await Start.start()
-
+    async def masschecker():
+        await checker()
+        input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Press enter ", 1))
+        await Start.start()
 
 updater()
