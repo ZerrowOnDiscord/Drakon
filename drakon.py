@@ -4,6 +4,9 @@ from pystyle import Center, Colors, Colorate
 import time
 import asyncio
 from tasksio import TaskPool
+import threading
+import discord
+import requests
 sys.path.append('methods')
 os.system(f'title [Drakon] - Loading...')
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -21,7 +24,12 @@ from webhook import WebhookSpammer
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] WebhookSpammer method loaded.")
 from reaction import ReactionSpammer
 print(f"{Colors.white}[{Colors.purple}+{Colors.white}] ReactionSpammer method loaded.")
+from report import Report
+print(f"{Colors.white}[{Colors.purple}+{Colors.white}] Report method loaded.")
 time.sleep(1)
+
+### Ne pas toucher !!!!
+version = 1.0
 
 ### Banner
 banner = """
@@ -44,6 +52,27 @@ def headofprogram():
     print(Colorate.Horizontal(Colors.purple_to_blue, "║    By Zerrow", 1))
     print(Colorate.Horizontal(Colors.purple_to_blue, "╚══════════════════════════", 1))
     print(" ")
+### Updater
+def updater():
+    lastversion = 'https://pastebin.com/raw/bvyhZHQC' 
+    r = requests.get(lastversion)
+    lastversion = float(r.text)
+    if version < lastversion:
+        os.system(f'title [Drakon] - New Update!')
+        headofprogram()
+        print(Colorate.Horizontal(Colors.purple_to_blue, ">> Une nouvelle mise a jour est disponnible !", 1))
+        choice = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] La download [y/n] → ", 1))
+        if choice == "y":
+            print(Colorate.Horizontal(Colors.purple_to_blue, "[!] Download... ", 1))
+            path = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez indiquer le chemin de telechargement de la nouvelle version → ", 1))
+            system(f"""cd {path} && powershell -Command "(New-Object Net.WebClient).DownloadFile('https://github.com/ZerrowOnDiscord/Drakon/archive/refs/heads/main.zip', 'drakon-main.zip')""")
+            print(Colorate.Horizontal(Colors.purple_to_blue, "[>] Downloaded ! ", 1))
+        if choice == "n":
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(Start.start())
+    else:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(Start.start())
 ### Start
 class Start:
     async def start():
@@ -58,6 +87,7 @@ class Start:
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".bio_changer")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".Webhook_spammer")
         print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".reaction_spammer")
+        print(Colorate.Horizontal(Colors.purple_to_blue, "║    [>] ", 1) + Colors.white + ".mass_report")
         print(Colorate.Horizontal(Colors.purple_to_blue, "╚══════════════════════════", 1))
         method = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Entrez une commande → ", 1))
         if method == ".joiner":
@@ -81,6 +111,10 @@ class Start:
         if method == ".reaction_spammer":
             os.system(f'title [Drakon] - Method: ReactionSpammer')
             await Methods.reactionspammer()
+        if method == ".mass_report":
+            os.system(f'title [Drakon] - Method: MassReport')
+            await Methods.report()
+            
 class Methods:
     async def joiner():
         tokens = []
@@ -207,6 +241,30 @@ class Methods:
                 await pool.put(ReactionSpammer.reactionSpammer(token, chId, msgId, emoji))
         time.sleep(4)
         await Start.start()
+    async def report():
+        tokens = []
+        for token in open("files/tokens.txt"):
+            if token != '':
+                tokens.append(
+                    token.replace("\n", "").replace('\r\n','').replace('\r', ''))
+        print('\n| REPORT REASONS\n| 1: Illegal content\n| 2: Harrassment\n| 3: Spam or Phishing Links\n| 4: Self harm\n| 5: NSFW Content\n')
+        chId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du channel → ", 1))
+        if chId == '0':
+            await Start.start()
+        msgId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du message → ", 1))
+        if msgId == '0':
+            await Start.start()
+        gId = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du serveur → ", 1))
+        if gId == '0':
+            await Start.start()
+        reason = input(Colorate.Horizontal(Colors.purple_to_blue, "[>] Veuillez fournir l'ID du serveur → ", 1))
+        if gId == '0':
+            await Start.start()
+        reason = str(int(reason) - 1)
+        async with TaskPool(5_000) as pool:
+            for token in tokens:
+                await pool.put(Report.report(token, chId, gId, msgId))
+        time.sleep(4)
+        await Start.start()
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(Start.start())
+updater()
