@@ -76,7 +76,6 @@ class ChannelSpammer():
             if proxyless == False:
                 randomProxy = proxies[random.randint(0, len(proxies)-1)]
 
-            print(f"https://discord.com/api/v9/channels/{letter}{chId}/messages")
             async with ClientSession(headers=headers) as session:
                 async with session.post(
                         f"https://discord.com/api/v9/channels/{chId}/messages", json=j, proxy=randomProxy) as req:
