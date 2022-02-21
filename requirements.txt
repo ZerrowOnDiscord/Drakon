@@ -1,3 +1,4 @@
 pystyle
 tasksio
 aiohttp
+requests
