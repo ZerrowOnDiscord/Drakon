@@ -2,3 +2,4 @@ pystyle
 tasksio
 aiohttp
 requests
+aiosonic
